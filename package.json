@@ -1,0 +1,20 @@
+{
+  "name": "lux-unless",
+  "description": "Conditionally add a middleware to lux with some common patterns.",
+  "version": "0.0.1",
+  "repository": {
+    "url": "git://github.com/nickschot/lux-unless.git"
+  },
+  "author": {
+    "name": "Nick Schot"
+  },
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha -R spec"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "mocha": "~1.11.0",
+    "chai": "~1.7.0"
+  }
+}
