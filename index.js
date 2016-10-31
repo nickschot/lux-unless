@@ -37,11 +37,11 @@ module.exports = function (options) {
       skip = skip || !!~methods.indexOf(req.method);
     }
 
-    if (skip) {
+    if (!skip) {
+      return parent(req, res, next);//await
+    } else if(next) {
       return next();
     }
-
-    parent(req, res, next);
   };
 };
 
