@@ -1,5 +1,7 @@
 Conditionally skip a middleware when a condition is met.
 
+[![Build Status](https://travis-ci.org/nickschot/lux-unless.svg?branch=master)](https://travis-ci.org/nickschot/lux-unless)
+
 This is a port of [express-unless](https://github.com/jfromaniello/express-unless) to the [lux](https://github.com/postlight/lux) API framework.
 
 ## Install
