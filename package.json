@@ -11,7 +11,7 @@
   "main": "dist/lux-unless.js",
   "scripts": {
     "build": "babel lib -d dist --source-maps",
-    "test": "npm run build && mocha -R spec",
+    "test": "npm run build && mocha --compilers js:babel-core/register -R spec",
     "prepublish": "npm run build"
   },
   "engines": {

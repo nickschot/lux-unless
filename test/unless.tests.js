@@ -1,6 +1,6 @@
-var unless = require('../dist/lux-unless').default;
-var assert = require('chai').assert;
-var parseURL = require('url').parse;
+import {assert} from 'chai';
+import {parse as parseURL} from 'url';
+import unless from '../dist/lux-unless';
 
 function getUrl(url){
   var urlObj = parseURL(url, true);
@@ -15,7 +15,7 @@ function testMiddleware (req, res) {
 describe('express-unless', function () {
 
   describe('with PATH(with method) exception', function () {
-    var mid = unless({
+    let mid = unless({
       path: [
         {
           url: '/test',
@@ -30,7 +30,7 @@ describe('express-unless', function () {
     }, testMiddleware);
 
     it('should not call the middleware when path and method match', function () {
-      var req = {
+      let req = {
         url: getUrl('/test?das=123'),
         method: 'POST'
       };
@@ -64,7 +64,7 @@ describe('express-unless', function () {
       assert.notOk(req.called);
     });
     it('should call the middleware when path or method mismatch', function () {
-      req = {
+      let req = {
         url: getUrl('/test?test=123'),
         method: 'PUT'
       };
@@ -83,12 +83,12 @@ describe('express-unless', function () {
   });
 
   describe('with PATH exception', function () {
-    var mid = unless({
+    let mid = unless({
       path: ['/test', '/fobo']
     }, testMiddleware);
 
     it('should not call the middleware when one of the path match', function () {
-      var req = {
+      let req = {
         url: getUrl('/test?das=123')
       };
 
@@ -106,7 +106,7 @@ describe('express-unless', function () {
     });
 
     it('should call the middleware when the path doesnt match', function () {
-      var req = {
+      let req = {
         url: getUrl('/foobar/test=123')
       };
 
@@ -117,16 +117,16 @@ describe('express-unless', function () {
   });
 
   describe('with PATH (regex) exception', function () {
-    var mid = unless({
+    let mid = unless({
       path: ['/test', /ag$/ig]
     }, testMiddleware);
 
     it('should not call the middleware when the regex match', function () {
-      req = {
+      let req = {
         url: getUrl('/foboag?test=123')
       };
 
-      req2 = {
+      let req2 = {
         url: getUrl('/foboag?test=456')
       };
 
@@ -140,12 +140,12 @@ describe('express-unless', function () {
   });
 
   describe('with EXT exception', function () {
-    var mid = unless({
+    let mid = unless({
       ext: ['jpg', 'html', 'txt']
     }, testMiddleware);
 
     it('should not call the middleware when the ext match', function () {
-      var req = {
+      let req = {
         url: getUrl('/foo.html?das=123')
       };
 
@@ -155,7 +155,7 @@ describe('express-unless', function () {
     });
 
     it('should call the middleware when the ext doesnt match', function () {
-      var req = {
+      let req = {
         url: getUrl('/foobar/test=123')
       };
 
@@ -166,12 +166,12 @@ describe('express-unless', function () {
   });
 
   describe('with METHOD exception', function () {
-    var mid = unless({
+    let mid = unless({
       method: ['OPTIONS', 'DELETE']
     }, testMiddleware);
 
     it('should not call the middleware when the method match', function () {
-      var req = {
+      let req = {
         url: getUrl('/foo.html?das=123'),
         method: 'OPTIONS'
       };
@@ -182,7 +182,7 @@ describe('express-unless', function () {
     });
 
     it('should call the middleware when the method doesnt match', function () {
-      var req = {
+      let req = {
         url: getUrl('/foobar/test=123'),
         method: 'PUT'
       };
@@ -194,12 +194,12 @@ describe('express-unless', function () {
   });
 
   describe('with custom exception', function () {
-    var mid = unless(function (req) {
+    let mid = unless(function (req) {
       return req.baba;
     }, testMiddleware);
 
     it('should not call the middleware when the custom rule match', function () {
-      var req = {
+      let req = {
         baba: true
       };
 
@@ -209,7 +209,7 @@ describe('express-unless', function () {
     });
 
     it('should call the middleware when the custom rule doesnt match', function () {
-      var req = {
+      let req = {
         baba: false
       };
 
@@ -220,12 +220,12 @@ describe('express-unless', function () {
   });
 
   describe('without originalUrl', function () {
-    var mid = unless({
+    let mid = unless({
       path: ['/test']
     }, testMiddleware);
 
     it('should not call the middleware when one of the path match', function () {
-      var req = {
+      let req = {
         url: getUrl('/test?das=123')
       };
 
@@ -235,7 +235,7 @@ describe('express-unless', function () {
     });
 
     it('should call the middleware when the path doesnt match', function () {
-      var req = {
+      let req = {
         url: getUrl('/foobar/test=123')
       };
 
