@@ -9,7 +9,6 @@
     "name": "Nick Schot"
   },
   "main": "dist/lux-unless.js",
-  "module": "dist/lux-unless.es2015.js",
   "scripts": {
     "build": "rollup -c",
     "test": "npm run build && mocha -R spec",
