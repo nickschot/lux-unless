@@ -12,13 +12,13 @@
   "module": "dist/lux-unless.es2015.js",
   "scripts": {
     "build": "rollup -c",
-    "test": "npm run build && mocha -R spec",
+    "test": "mocha -R spec",
     "prepublish": "npm run build"
   },
   "devDependencies": {
     "babel-preset-lux": "1.3.0",
-    "chai": "~1.7.0",
-    "mocha": "~1.11.0",
+    "chai": "^3.5.0",
+    "mocha": "^3.1.2",
     "rollup": "0.36.3",
     "rollup-plugin-babel": "2.6.1",
     "rollup-plugin-json": "2.0.2",

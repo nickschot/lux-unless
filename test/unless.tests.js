@@ -1,133 +1,137 @@
-var unless = require('..');
+var unless = require('../dist/lux-unless');
 var assert = require('chai').assert;
-var noop = function(){};
+var parseURL = require('url').parse;
 
-function testMiddleware (req, res, next) {
-  req.called = true;
+function getUrl(url){
+  var urlObj = parseURL(url, true);
+  urlObj.params = [];
+  return urlObj;
 }
 
-testMiddleware.unless = unless;
+function testMiddleware (req, res) {
+  req.called = true;
+}
 
 describe('express-unless', function () {
 
   describe('with PATH(with method) exception', function () {
-    var mid = testMiddleware.unless({
+    var mid = unless({
       path: [
         {
-          url: '/test',
+          url: getUrl('/test'),
           methods: ['POST', 'GET']
         },
         {
-          url: '/bar',
+          url: getUrl('/bar'),
           methods: ['PUT']
         },
         '/foo'
       ]
-    });
+    }, testMiddleware);
 
     it('should not call the middleware when path and method match', function () {
       var req = {
-        originalUrl: '/test?das=123',
+        url: getUrl('/test?das=123'),
         method: 'POST'
       };
 
-      mid(req, {}, noop);
+      mid(req, {});
       assert.notOk(req.called);
 
 
       req = {
-        originalUrl: '/test?test=123',
+        url: getUrl('/test?test=123'),
         method: 'GET'
       };
 
-      mid(req, {}, noop);
+      mid(req, {});
       assert.notOk(req.called);
 
       req = {
-        originalUrl: '/bar?test=123',
+        url: getUrl('/bar?test=123'),
         method: 'PUT'
       };
 
-      mid(req, {}, noop);
+      mid(req, {});
       assert.notOk(req.called);
 
       req = {
-        originalUrl: '/foo',
+        url: getUrl('/foo'),
         method: 'PUT'
       };
 
-      mid(req, {}, noop);
+      mid(req, {});
       assert.notOk(req.called);
     });
     it('should call the middleware when path or method mismatch', function () {
       req = {
-        originalUrl: '/test?test=123',
+        url: getUrl('/test?test=123'),
         method: 'PUT'
       };
 
-      mid(req, {}, noop);
+      mid(req, {});
       assert.ok(req.called);
 
       req = {
-        originalUrl: '/unless?test=123',
+        url: getUrl('/unless?test=123'),
         method: 'PUT'
       };
 
-      mid(req, {}, noop);
+      mid(req, {});
       assert.ok(req.called);
     });
   });
 
   describe('with PATH exception', function () {
-    var mid = testMiddleware.unless({
+    var mid = unless({
       path: ['/test', '/fobo']
-    });
+    }, testMiddleware);
 
     it('should not call the middleware when one of the path match', function () {
       var req = {
-        originalUrl: '/test?das=123'
+        url: getUrl('/test?das=123')
       };
 
-      mid(req, {}, noop);
+      mid(req, {});
 
       assert.notOk(req.called);
 
       req = {
-        originalUrl: '/fobo?test=123'
+        url: getUrl('/fobo?test=123')
       };
 
-      mid(req, {}, noop);
+      mid(req, {});
 
       assert.notOk(req.called);
     });
 
     it('should call the middleware when the path doesnt match', function () {
       var req = {
-        originalUrl: '/foobar/test=123'
+        url: getUrl('/foobar/test=123')
       };
 
-      mid(req, {}, noop);
+      mid(req, {});
 
       assert.ok(req.called);
     });
   });
 
   describe('with PATH (regex) exception', function () {
-    var mid = testMiddleware.unless({
+    var mid = unless({
       path: ['/test', /ag$/ig]
-    });
+    }, testMiddleware);
 
     it('should not call the middleware when the regex match', function () {
       req = {
-        originalUrl: '/foboag?test=123'
+        url: getUrl('/foboag?test=123')
       };
 
       req2 = {
-        originalUrl: '/foboag?test=456'
+        url: getUrl('/foboag?test=456')
       };
 
-      mid(req, {}, noop);
-      mid(req2, {}, noop);
+      mid(req, {});
+      mid(req2, {});
 
       assert.notOk(req.called);
       assert.notOk(req2.called);
@@ -135,111 +139,71 @@ describe('express-unless', function () {
 
   });
 
-  describe('with PATH (useOriginalUrl) exception', function () {
-    var mid = testMiddleware.unless({
-      path: ['/test', '/fobo'],
-      useOriginalUrl: false
-    });
-
-    it('should not call the middleware when one of the path match '+
-        'req.url instead of req.originalUrl', function () {
-      var req = {
-        originalUrl: '/orig/test?das=123',
-        url: '/test?das=123'
-      };
-
-      mid(req, {}, noop);
-
-      assert.notOk(req.called);
-
-      req = {
-        originalUrl: '/orig/fobo?test=123',
-        url: '/fobo?test=123'
-      };
-
-      mid(req, {}, noop);
-
-      assert.notOk(req.called);
-    });
-
-    it('should call the middleware when the path doesnt match '+
-        'req.url even if path matches req.originalUrl', function () {
-      var req = {
-        originalUrl: '/test/test=123',
-        url: '/foobar/test=123'
-      };
-
-      mid(req, {}, noop);
-
-      assert.ok(req.called);
-    });
-  });
-
   describe('with EXT exception', function () {
-    var mid = testMiddleware.unless({
+    var mid = unless({
       ext: ['jpg', 'html', 'txt']
-    });
+    }, testMiddleware);
 
     it('should not call the middleware when the ext match', function () {
       var req = {
-        originalUrl: '/foo.html?das=123'
+        url: getUrl('/foo.html?das=123')
       };
 
-      mid(req, {}, noop);
+      mid(req, {});
 
       assert.notOk(req.called);
     });
 
     it('should call the middleware when the ext doesnt match', function () {
       var req = {
-        originalUrl: '/foobar/test=123'
+        url: getUrl('/foobar/test=123')
       };
 
-      mid(req, {}, noop);
+      mid(req, {});
 
       assert.ok(req.called);
     });
   });
 
   describe('with METHOD exception', function () {
-    var mid = testMiddleware.unless({
+    var mid = unless({
       method: ['OPTIONS', 'DELETE']
-    });
+    }, testMiddleware);
 
     it('should not call the middleware when the method match', function () {
       var req = {
-        originalUrl: '/foo.html?das=123',
+        url: getUrl('/foo.html?das=123'),
         method: 'OPTIONS'
       };
 
-      mid(req, {}, noop);
+      mid(req, {});
 
       assert.notOk(req.called);
     });
 
     it('should call the middleware when the method doesnt match', function () {
       var req = {
-        originalUrl: '/foobar/test=123',
+        url: getUrl('/foobar/test=123'),
         method: 'PUT'
       };
 
-      mid(req, {}, noop);
+      mid(req, {});
 
       assert.ok(req.called);
     });
   });
 
   describe('with custom exception', function () {
-    var mid = testMiddleware.unless(function (req) {
+    var mid = unless(function (req) {
       return req.baba;
-    });
+    }, testMiddleware);
 
     it('should not call the middleware when the custom rule match', function () {
       var req = {
         baba: true
       };
 
-      mid(req, {}, noop);
+      mid(req, {});
 
       assert.notOk(req.called);
     });
@@ -249,33 +213,33 @@ describe('express-unless', function () {
         baba: false
       };
 
-      mid(req, {}, noop);
+      mid(req, {});
 
       assert.ok(req.called);
     });
   });
 
   describe('without originalUrl', function () {
-    var mid = testMiddleware.unless({
+    var mid = unless({
       path: ['/test']
-    });
+    }, testMiddleware);
 
     it('should not call the middleware when one of the path match', function () {
       var req = {
-        url: '/test?das=123'
+        url: getUrl('/test?das=123')
       };
 
-      mid(req, {}, noop);
+      mid(req, {});
 
       assert.notOk(req.called);
     });
 
     it('should call the middleware when the path doesnt match', function () {
       var req = {
-        url: '/foobar/test=123'
+        url: getUrl('/foobar/test=123')
       };
 
-      mid(req, {}, noop);
+      mid(req, {});
 
       assert.ok(req.called);
     });
