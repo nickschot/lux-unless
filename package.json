@@ -12,7 +12,7 @@
   "module": "dist/lux-unless.es2015.js",
   "scripts": {
     "build": "rollup -c",
-    "test": "mocha -R spec",
+    "test": "npm run build && mocha -R spec",
     "prepublish": "npm run build"
   },
   "devDependencies": {

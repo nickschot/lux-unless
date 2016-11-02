@@ -18,11 +18,11 @@ describe('express-unless', function () {
     var mid = unless({
       path: [
         {
-          url: getUrl('/test'),
+          url: '/test',
           methods: ['POST', 'GET']
         },
         {
-          url: getUrl('/bar'),
+          url: '/bar',
           methods: ['PUT']
         },
         '/foo'
