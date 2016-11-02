@@ -2,17 +2,20 @@
   "name": "lux-unless",
   "description": "Conditionally add a middleware to lux with some common patterns.",
   "version": "0.0.1",
-  "repository": {
-    "url": "git://github.com/nickschot/lux-unless.git"
-  },
-  "author": {
-    "name": "Nick Schot"
+  "repository": "github:nickschot/lux-unless",
+  "author": "Nick Schot",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/nickschot/lux-unless/issues"
   },
   "main": "dist/lux-unless.js",
   "scripts": {
     "build": "babel lib -d dist --source-maps",
     "test": "npm run build && mocha -R spec",
     "prepublish": "npm run build"
+  },
+  "engines": {
+    "node": ">= 6.0"
   },
   "devDependencies": {
     "babel-cli": "^6.18.0",
