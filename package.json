@@ -8,13 +8,20 @@
   "author": {
     "name": "Nick Schot"
   },
-  "main": "index.js",
+  "main": "dist/lux-unless.js",
+  "module": "dist/lux-unless.es2015.js",
   "scripts": {
-    "test": "mocha -R spec"
+    "build": "rollup -c",
+    "test": "npm run build && mocha -R spec",
+    "prepublish": "npm run build"
   },
-  "dependencies": {},
   "devDependencies": {
+    "babel-preset-lux": "1.3.0",
+    "chai": "~1.7.0",
     "mocha": "~1.11.0",
-    "chai": "~1.7.0"
+    "rollup": "0.36.3",
+    "rollup-plugin-babel": "2.6.1",
+    "rollup-plugin-json": "2.0.2",
+    "rollup-plugin-node-resolve": "2.0.0"
   }
 }
