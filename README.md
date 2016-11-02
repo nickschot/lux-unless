@@ -2,7 +2,7 @@ Conditionally skip a middleware when a condition is met.
 
 [![Build Status](https://travis-ci.org/nickschot/lux-unless.svg?branch=master)](https://travis-ci.org/nickschot/lux-unless)
 
-This is a port of [express-unless](https://github.com/jfromaniello/express-unless) to the [lux](https://github.com/postlight/lux) API framework.
+This is a port of [express-unless](https://github.com/jfromaniello/express-unless) to the [Lux](https://github.com/postlight/lux) API framework.
 
 ## Install
 
@@ -10,30 +10,16 @@ This is a port of [express-unless](https://github.com/jfromaniello/express-unles
 
 ## Usage
 
-With existing middlewares:
+You can use lux-unless in Lux with a middleware called `myMiddleware` as follows:
 
 ```javascript
-var unless = require('express-unless');
+import unless from 'lux-unless';
 
-
-var static = express.static(__dirname + '/public');
-static.unless = unless;
-
-app.use(static.unless({ method: 'OPTIONS' }));
-```
-
-If you are authoring a middleware you can support unless as follow:
-
-```javascript
-module.exports = function (middlewareOptions) {
-  var mymid = function (req, res, next) {
-
-  };
-
-  mymid.unless = require('lux-unless');
-
-  return mymid;
-};
+class ApplicationController extends Controller {
+    beforeAction = [
+        unless({path: ['/users/login']}, myMiddleware)
+    ];
+}
 ```
 
 ## Current options
@@ -49,23 +35,19 @@ module.exports = function (middlewareOptions) {
 Require authentication for every request unless the path is index.html.
 
 ```javascript
-app.use(requiresAuth.unless({
+unless({
   path: [
     '/index.html',
     { url: '/', methods: ['GET', 'PUT']  }
   ]
-}))
+}, requiresAuth);
 ```
 
-Avoid a fstat for request to routes doesnt end with a given extension.
+Avoid a fstat for request to routes which don't end with a given extension.
 
 ```javascript
-app.use(static.unless(function (req) {
+unless(function (req) {
   var ext = url.parse(req.originalUrl).pathname.substr(-4);
   return !~['.jpg', '.html', '.css', '.js'].indexOf(ext);
-}));
+}, static);
 ```
-
-## License
-
-MIT 2014 - Jose Romaniello
