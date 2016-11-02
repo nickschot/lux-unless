@@ -1,6 +1,6 @@
 {
   "name": "lux-unless",
-  "description": "Conditionally add a middleware to lux with some common patterns.",
+  "description": "Conditionally add a middleware to Lux with some common patterns.",
   "version": "0.0.1",
   "repository": "github:nickschot/lux-unless",
   "author": "Nick Schot",
