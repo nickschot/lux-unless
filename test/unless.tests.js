@@ -1,4 +1,4 @@
-var unless = require('../dist/lux-unless');
+var unless = require('../dist/lux-unless').default;
 var assert = require('chai').assert;
 var parseURL = require('url').parse;
 
