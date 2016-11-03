@@ -3,7 +3,7 @@ import {parse as parseURL} from 'url';
 import unless from '../dist/lux-unless';
 
 function getUrl(url){
-  var urlObj = parseURL(url, true);
+  let urlObj = parseURL(url, true);
   urlObj.params = [];
   return urlObj;
 }
