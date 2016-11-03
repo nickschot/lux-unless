@@ -3,6 +3,8 @@
   "description": "Conditionally add a middleware to Lux with some common patterns.",
   "version": "0.1.0",
   "keywords": [
+    "condition",
+    "conditional",
     "lux",
     "lux-middleware"
   ],
