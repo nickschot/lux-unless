@@ -51,3 +51,6 @@ unless((req) => {
   return !['.jpg', '.html', '.css', '.js'].includes(ext);
 }, static);
 ```
+
+## License
+This project is licensed under the MIT license. See the [LICENSE](LICENSE) file for more info.
