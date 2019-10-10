@@ -36,7 +36,7 @@
     "babel-plugin-transform-flow-strip-types": "^6.18.0",
     "babel-plugin-transform-object-rest-spread": "^6.19.0",
     "chai": "^4.1.2",
-    "coveralls": "^3.0.0",
+    "coveralls": "^3.0.7",
     "mocha": "^3.4.1",
     "nyc": "^11.2.1"
   }
